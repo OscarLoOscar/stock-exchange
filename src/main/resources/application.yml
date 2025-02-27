@@ -1,0 +1,48 @@
+server:
+  port: 8081
+
+yahoo:
+  finance:
+    api:
+      url: query1.finance.yahoo.com/v7/finance/quote
+      symbols: NVDA,VOO,TSLA,DELL
+
+database: 
+  db-name: "yahoo_finance"
+
+redis: 
+  crumb_key: "CRUMB"
+  cookie_key: "COOKIE"
+  cookie.refresh.interval: 18000000  # Interval in milliseconds (5 hour)
+
+spring:
+  datasource:
+    driverClassName: "org.postgresql.Driver"
+    url: "jdbc:postgresql://localhost:5432/${database.db-name}"
+    username: postgres
+    password: admin1234
+
+spring.jpa:
+  show-sql: true
+  hibernate.ddl-auto: update 
+  properties :
+    hibernate:
+      format_sql: true
+      default_schema: public
+      jdbc:
+        lob:
+          non_contextual_creation: true
+
+spring.data.redis:
+  host: localhost
+  password: 6379
+  database: 1
+  lettuce:
+    pool:
+      max-wait: -1ms
+      max-active: 8
+      max-idle: 8
+      min-idle: 0
+  timeout: 10000ms
+  cache:
+    type: redis
