@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
+import com.example.coin_exchange.exception.ApiResp;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestControllerAdvice
