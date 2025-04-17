@@ -5,7 +5,11 @@ yahoo:
   finance:
     api:
       url: query1.finance.yahoo.com/v7/finance/quote
-      symbols: NVDA,VOO,TSLA,DELL
+      symbols: 
+        - NVDA
+        - VOO
+        - TSLA
+        - DELL
 
 database: 
   db-name: "yahoo_finance"

@@ -1,21 +1,28 @@
 package com.example.coin_exchange.annotation;
 
-
-import java.util.Objects;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class SymbolValidator implements ConstraintValidator<SymbolCheck,StockSymbol>{
-  
-  
-  @Override
-  public boolean isValid(StockSymbol value, ConstraintValidatorContext context) {
-    if (Objects.isNull(value) || Objects.isNull(value.getStockIds())) {
-      return false; 
-    }
+@Component
+public class SymbolValidator implements ConstraintValidator<SymbolCheck, String> {
+  private final ValidSymbolProperties symbolProperties;
 
-    List<String> stockIds = value.getStockIds();
-    return stockIds.contains(value.getSymbol()); 
+  @Autowired
+  public SymbolValidator(ValidSymbolProperties symbolProperties) {
+    this.symbolProperties = symbolProperties;
+  }
+
+  @Override
+  public boolean isValid(String symbol, ConstraintValidatorContext context) {
+    if (symbol == null || symbol.trim().isEmpty())
+      return false;
+
+    List<String> validSymbols = symbolProperties.getList();
+    return validSymbols.contains(symbol.trim().toUpperCase());
   }
 }

@@ -4,17 +4,14 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-import jakarta.validation.Constraint;
-import jakarta.validation.Payload;
 
 @Documented
-@Constraint(validatedBy = SymbolValidator.class)
-@Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = SymbolValidator.class) // Links to the validator class
 public @interface SymbolCheck {
-  String message() default "Invalid Symbol.Please use a valid stock symbol.";
+  
+  String message() default "Invalid Symbol. Please use a valid symbol.";
 
   Class<?>[] groups() default {};
 
