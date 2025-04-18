@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.coin_exchange.Redis.RedisHelper;
+
+import com.example.coin_exchange.Redis.RedisCacheHelper;
+import com.example.coin_exchange.Redis.core.RedisHelper;
 import com.example.coin_exchange.entity.StockQuoteYahoo;
 import com.example.coin_exchange.mapper.Mapper;
 import com.example.coin_exchange.model.CandleStick;

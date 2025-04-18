@@ -1,4 +1,4 @@
-package com.example.coin_exchange.controller.impl;
+package com.example.coin_exchange.controller;
 
 import java.util.List;
 import org.springframework.http.HttpStatus;

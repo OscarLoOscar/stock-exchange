@@ -1,4 +1,4 @@
-package com.example.coin_exchange.controller.impl;
+package com.example.coin_exchange.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;

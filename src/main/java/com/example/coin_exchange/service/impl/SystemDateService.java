@@ -1,12 +1,16 @@
 package com.example.coin_exchange.service.impl;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.coin_exchange.Redis.RedisHelper;
+
+import com.example.coin_exchange.Redis.core.RedisHelper;
 import com.example.coin_exchange.repository.StockQuoteYahooRepo;
 import com.example.coin_exchange.service.SystemDateServiceImpl;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -33,10 +37,11 @@ public class SystemDateService implements SystemDateServiceImpl {
   }
 
   private String getSysData(String key) {
-    return redisHelper.get(key).toString();
+    return redisHelper.get(key,String.class);
   }
 
-  private boolean setSysDate(String key, String date) {
-    return redisHelper.set(key, EXPERATION_HOURS);
-  }
+  private void setSysDate(String key, String date) {
+     redisHelper.set(key, date, Duration.ofHours(EXPERATION_HOURS));
+}
+
 }

@@ -1,4 +1,4 @@
-package com.example.coin_exchange.service.impl;
+package com.example.coin_exchange.service;
 
 import java.util.List;
 import com.example.coin_exchange.model.CandleStick;

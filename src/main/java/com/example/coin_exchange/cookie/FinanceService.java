@@ -7,6 +7,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -18,11 +19,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import com.example.coin_exchange.Redis.RedisHelper;
+
+import com.example.coin_exchange.Redis.core.RedisHelper;
 import com.example.coin_exchange.infra.ApiUtil;
 import com.example.coin_exchange.infra.UriScheme;
 import com.example.coin_exchange.model.apiResponse.YahooApiResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
