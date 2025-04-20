@@ -20,10 +20,10 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.example.coin_exchange.Redis.core.RedisHelper;
 import com.example.coin_exchange.infra.ApiUtil;
 import com.example.coin_exchange.infra.UriScheme;
 import com.example.coin_exchange.model.apiResponse.YahooApiResponse;
+import com.example.coin_exchange.redis.core.RedisHelper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import lombok.extern.slf4j.Slf4j;

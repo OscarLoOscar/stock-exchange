@@ -8,23 +8,27 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.example.coin_exchange.Redis.RedisCacheHelper;
-import com.example.coin_exchange.Redis.config.RedisConfig;
-import com.example.coin_exchange.Redis.core.RedisHelper;
+import com.example.coin_exchange.redis.config.RedisConfig;
+import com.example.coin_exchange.redis.core.RedisHelper;
+import com.example.coin_exchange.redis.facades.RedisCacheHelper;
+import com.example.coin_exchange.redis.facades.RedisExpiryManager;
+import com.example.coin_exchange.redis.facades.RedisLoggingHelper;
 
 @SpringBootTest(classes = {
   RedisHelper.class,
   RedisCacheHelper.class,
-  RedisConfig.class
+  RedisConfig.class,
+  RedisExpiryManager.class,
+  RedisLoggingHelper.class
 })
 @ActiveProfiles("test")
 @EnableAutoConfiguration(exclude = {

@@ -18,6 +18,7 @@ redis:
   crumb_key: "CRUMB"
   cookie_key: "COOKIE"
   cookie.refresh.interval: 18000000  # Interval in milliseconds (5 hour)
+  default-expiry-seconds: 3600
 
 spring:
   datasource:
