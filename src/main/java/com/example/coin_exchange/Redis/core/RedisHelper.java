@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -23,6 +24,8 @@ public class RedisHelper {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    private static final int MAX_RETRY = 2;
 
     public <T> void set(String key, T value) {
         set(key, value, Duration.ZERO);
@@ -41,15 +44,22 @@ public class RedisHelper {
         }
     }
 
-    public <T> T get(String key, Class<T> clazz) {
+    private <T> T getWithRetry(String key, Class<T> clazz, int retryCount) {
         try {
             Object value = redisTemplate.opsForValue().get(key);
-            if (value == null)
-                return null;
+            if (value == null) return null;
             return objectMapper.readValue(value.toString(), clazz);
         } catch (IOException e) {
+            if (retryCount < MAX_RETRY) {
+                log.warn("[RedisHelper] Retry due to deserialization error on key={} attempt={}", key, retryCount);
+                return getWithRetry(key, clazz, retryCount + 1);
+            }
             throw new RedisSerializationException("JSON deserialize error", e);
         }
+    }
+
+    public <T> T get(String key, Class<T> clazz) {
+        return getWithRetry(key, clazz, 0);
     }
 
     public boolean expire(String key, long time) {
@@ -258,5 +268,48 @@ public class RedisHelper {
         Long seconds = redisTemplate.getExpire(key, TimeUnit.SECONDS);
         return seconds != null && seconds > 0 ? Duration.ofSeconds(seconds) : Duration.ZERO;
     }
-    
+
+    public <T> List<T> getRecentList(String key, int limit, Class<T> clazz) {
+        try {
+            List<Object> range = redisTemplate.opsForList().range(key, 0, limit - 1);
+            return range.stream().map(obj -> {
+                try {
+                    return objectMapper.readValue(obj.toString(), clazz);
+                } catch (Exception e) {
+                    log.error("LRANGE deserialization error", e);
+                    return null;
+                }
+            }).filter(Objects::nonNull).collect(Collectors.toList());
+        } catch (Exception e) {
+            log.error("getRecentList error: {}", key, e);
+            return Collections.emptyList();
+        }
+    }
+
+    public Set<Object> getZSetByScoreRange(String key, double minScore, double maxScore) {
+        try {
+            return redisTemplate.opsForZSet().rangeByScore(key, minScore, maxScore);
+        } catch (Exception e) {
+            log.error("getZSetByScoreRange error: {}", key, e);
+            return Collections.emptySet();
+        }
+    }
+
+    public void alertIfKeyMissing(String key) {
+        if (!hasKey(key)) {
+            log.warn("[Redis ALERT] Key not found in Redis: {}", key);
+        }
+    }
+
+    public <T> T getOrSetWithAlert(String key, Supplier<T> supplier, Class<T> clazz, Duration ttl) {
+        T cached = get(key, clazz);
+        if (cached != null) return cached;
+
+        alertIfKeyMissing(key);
+        T fresh = supplier.get();
+        if (fresh != null) {
+            set(key, fresh, ttl);
+        }
+        return fresh;
+    }
 }
